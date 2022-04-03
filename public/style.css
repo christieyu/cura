@@ -5,7 +5,7 @@
     src: url('yugothic.ttf') format('truetype');
 }
 
-/* Variables */
+/* variables */
 :root {
     --black: 
     rgba(0, 0, 0, 1);
@@ -29,10 +29,32 @@
     --font-family-yu_gothic-regular: "Yu Gothic-Regular";
 }
 
-/* Styles */
+/* styles */
 .hidden, .hidden * {
     pointer-events: none;
     visibility: hidden;
+}
+
+a {
+    color: inherit; /* blue colors for links too */
+    text-decoration: inherit; /* no underline */
+}
+
+a:hover {
+    color: var(--persimmon);
+}
+
+.nav-menu {
+    height: 20px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.header {
+    height: 70px;
+    left: 10px;
+    position:relative;
+    z-index: -1;
 }
  
 .title {
@@ -43,14 +65,6 @@
     right: 20px; top: 20px;
     position: absolute;
     text-align: right;
-}
-  
-.date {
-    /* align-items: flex-start;
-    display: flex; */
-    height: 235px; width: 454px;
-    left: 20; top: -10px;
-    position: absolute;
 }
   
 .date-month {
@@ -101,7 +115,7 @@
     position: absolute;
 }
 
-/* gallery canvases */
+/* gallery canvases — horizontal */
 .h-1 {
     height: 82px; width: 122px;
     left: 0px; top: 212px;
@@ -163,7 +177,7 @@
     height: 41px; width: 61px;
     left: 721px; top: 298px;
 }
-    
+/* gallery canvases — vertical */
 .v-1 {
     width: 113px; height: 152px;
     left: 226px; top: 130px;
@@ -193,6 +207,24 @@
     left: 637px; top: 299px;
 }
 
+.return {
+    position: absolute;
+    left: 20px; top: 20px;
+    color: var(--darkgrey);
+    font-family: var(--font-family-yu_gothic-regular);
+    font-size: var(--font-size-xs);
+    text-align: right;
+}
+
+.collections {
+    position: absolute;
+    width: 97%;
+    height: 57%;
+    left: 1.5%;
+    top: 37%;
+    overflow-y: scroll;
+}
+
 footer {
     position: fixed;
     right: 20px; bottom: 0px;
@@ -200,4 +232,4 @@ footer {
     font-family: var(--font-family-yu_gothic-regular);
     font-size: var(--font-size-xs);
     text-align: right;
-  }
+}

@@ -1,0 +1,41 @@
+extends layout
+
+mixin card
+    div.card.text-white
+        img.card-img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+
+block layout-content
+    div.nav-menu
+        div.return 
+            a(href="../") Return to home
+    div.header
+        div.date
+            div.date-month RECENT
+    div.collections
+        div.row
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+        br
+        div.row
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card
+            div.col
+                +card

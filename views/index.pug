@@ -1,15 +1,17 @@
 extends layout
 
 block layout-content
-    div.title tables/1990/summer/yellow
-    div.date
+    div.header
+        div.title tables/1990/summer/yellow
         div.date-month #{date_month}
         div.date-day #{date_day}
     div.menu
         div.menu-link ■ Generate a new exhibit
         div.menu-link ■ Save exhibit into collections
-        div.menu-link-persimmon  ■ My collections
-        div.menu-link ■ Recently viewed items
+        div.menu-link-persimmon
+            a(href="/collections") ■ My collections
+        div.menu-link
+            a(href="/recent") ■ Recently viewed items
     div.gallery
         - var h = 0;
         while h < 14

@@ -1,0 +1,21 @@
+extends layout
+
+block layout-content
+    div.title tables/1990/summer/yellow
+    div.date
+        div.date-month #{date_month}
+        div.date-day #{date_day}
+    div.menu
+        div.menu-link ■ Generate a new exhibit
+        div.menu-link ■ Save exhibit into collections
+        div.menu-link-persimmon  ■ My collections
+        div.menu-link ■ Recently viewed items
+    div.gallery
+        - var h = 0;
+        while h < 14
+            - ++h
+            img(class=("h-" + h), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        - var v = 0;
+        while v < 7
+            - ++v
+            img(class=("v-" + v), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")

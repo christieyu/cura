@@ -62,7 +62,7 @@ a:hover {
     font-family: var(--font-family-yu_gothic-regular);
     font-size: var(--font-size-xl);
     height: 48px; width: 396px;
-    right: 20px; top: 20px;
+    right: 30px; top: 20px;
     position: absolute;
     text-align: right;
 }
@@ -116,8 +116,7 @@ a:hover {
 
 .gallery > img, .gallery-small > img {
     object-fit: cover;
-    position: absolute;
-    border: 1px solid var(--black);
+    border: 1px solid var(--darkgrey);
     overflow: hidden;
     position: absolute;
 }
@@ -230,6 +229,18 @@ a:hover {
     text-align: right;
 }
 
+.recent {
+    position: absolute;
+    width: 97%; height: 57%;
+    left: 1.5%; top: 37%;
+    column-count: 6;
+    column-gap: 2%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 15%);
+    grid-auto-rows: 20px;
+    overflow-y: scroll;
+}
+
 .collections {
     position: absolute;
     width: 97%; height: 57%;
@@ -241,34 +252,33 @@ a:hover {
     position: absolute;
     width: 25%; height: 90.7%;
     right: 20px; top: 20px;
-    display: flex;
-    flex-flow: column wrap;
+    column-count: 2;
+    column-gap: 3%;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 48.5%);
+    grid-auto-rows: 20px;
     overflow: scroll;
-    counter-reset: items;
 }
 
-.item {
-    width: 46%;
-    margin-bottom: 4%;
-    margin-left: 4%;
+.card {
+    margin-bottom: 10pt;
 }
 
-/* masonry tutorial from here: https://tobiasahlin.com/blog/common-flexbox-patterns/#masonry-or-mosaic */
-/* Re-order items into rows */
-.item:nth-child(2n+1) { order: 1; }
-.item:nth-child(2n) { order: 2; }
-
-.item::before {
-    counter-increment: items;
-    content: counter(items);
+.card > img {
+    object-fit: cover;
+    overflow: hidden;
 }
-/* Force new columns */
-.collection-list::before,
-.collection-list::after {
-    content: "";
-    flex-basis: 100%;
-    width: 0;
-    order: 1;
+
+.card-h {
+    grid-row-end: span 6;
+}
+
+.card-sq {
+    grid-row-end: span 9;
+}
+
+.card-v {
+    grid-row-end: span 12;
 }
 
 footer {

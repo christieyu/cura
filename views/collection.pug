@@ -1,12 +1,8 @@
 extends layout
 
-mixin card1
-    div.card.text-white
+mixin card
+    div.card
         img.card-img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
-
-mixin card2
-    div.card.text-white
-        img.card-img(src="https://www.tate.org.uk/art/images/work/N/N05/N05078_10.jpg")
 
 block layout-content
     div.nav-menu
@@ -30,21 +26,22 @@ block layout-content
         while v < 7
             - ++v
             img(class=("v-" + v), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+    
+    //- div.collection-list(data-masonry='{ "itemSelector": ".item", "columnWidth": 60, "horizontalOrder": "true" }')
     div.collection-list
-        div.item
-            a(href="/collection")
-                +card1
-        div.item
-            +card2
-        div.item
-            +card1
-        div.item
-            +card2
-        div.item
-            +card2
-        div.item
-            +card1
-        div.item
-            +card1
-        div.item
-            +card2
+        div.card.card-v
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-h
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-sq
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-v
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-v
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-h
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-sq
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        div.card.card-v
+            img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")

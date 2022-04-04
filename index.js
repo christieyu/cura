@@ -15,6 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
+app.use('/js', express.static(path.join(__dirname, 'node_modules/masonry-layout/dist/masonry.pkgd.min.js')))
 
 // Routes Definitions
 app.get("/", (req, res) => {

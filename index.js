@@ -33,6 +33,13 @@ app.get("/collections", (req, res) => {
     });
 });
 
+app.get("/collection", (req, res) => {
+    date = new Date()
+    res.render("collection", { 
+        title: "Collection",
+    });
+});
+
 app.get("/recent", (req, res) => {
     date = new Date()
     res.render("recent", { 

@@ -12,7 +12,7 @@
     --darkgrey: 
     rgba(125, 125, 125, 1);
     --persimmon: 
-    rgba(247, 105, 86, 1);
+    rgb(247, 105, 86);
     --grey: 
     rgba(255, 255, 255, 0.851);
     --white: 
@@ -53,7 +53,7 @@ a:hover {
 .header {
     height: 70px;
     left: 10px;
-    position:relative;
+    position: relative;
     z-index: -1;
 }
  
@@ -65,6 +65,15 @@ a:hover {
     right: 20px; top: 20px;
     position: absolute;
     text-align: right;
+}
+ 
+.title-small {
+    color: var(--black);
+    font-family: var(--font-family-yu_gothic-regular);
+    font-size: var(--font-size-xl);
+    left: 10px; top: 20px;
+    position: absolute;
+    line-height: 1em;
 }
   
 .date-month {
@@ -100,19 +109,24 @@ a:hover {
 }
 
 .gallery {
-    width: 860px;
-    height: 480px;
-    right: 60px;
+    width: 860px; height: 480px;
+    right: 60px; top: 130px;
     position: absolute;
-    top: 130px;
 }
 
-.gallery > img {
+.gallery > img, .gallery-small > img {
     object-fit: cover;
     position: absolute;
     border: 1px solid var(--black);
     overflow: hidden;
     position: absolute;
+}
+
+.gallery-small {
+    position: absolute;
+    width: 67.2%; height: 72.5%;
+    left: 20px; top: 140px;
+    /* background: red; */
 }
 
 /* gallery canvases — horizontal */
@@ -218,11 +232,43 @@ a:hover {
 
 .collections {
     position: absolute;
-    width: 97%;
-    height: 57%;
-    left: 1.5%;
-    top: 37%;
+    width: 97%; height: 57%;
+    left: 1.5%; top: 37%;
     overflow-y: scroll;
+}
+
+.collection-list {
+    position: absolute;
+    width: 25%; height: 90.7%;
+    right: 20px; top: 20px;
+    display: flex;
+    flex-flow: column wrap;
+    overflow: scroll;
+    counter-reset: items;
+}
+
+.item {
+    width: 46%;
+    margin-bottom: 4%;
+    margin-left: 4%;
+}
+
+/* masonry tutorial from here: https://tobiasahlin.com/blog/common-flexbox-patterns/#masonry-or-mosaic */
+/* Re-order items into rows */
+.item:nth-child(2n+1) { order: 1; }
+.item:nth-child(2n) { order: 2; }
+
+.item::before {
+    counter-increment: items;
+    content: counter(items);
+}
+/* Force new columns */
+.collection-list::before,
+.collection-list::after {
+    content: "";
+    flex-basis: 100%;
+    width: 0;
+    order: 1;
 }
 
 footer {

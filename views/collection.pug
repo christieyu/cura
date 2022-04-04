@@ -1,0 +1,50 @@
+extends layout
+
+mixin card1
+    div.card.text-white
+        img.card-img(src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+
+mixin card2
+    div.card.text-white
+        img.card-img(src="https://www.tate.org.uk/art/images/work/N/N05/N05078_10.jpg")
+
+block layout-content
+    div.nav-menu
+        div.return 
+            a(href="../") Return to home&emsp;&emsp;
+            a(href="/collections") Return to collections&emsp;&emsp;
+            a(href="/recent") Recently viewed
+    div.header
+        div.title-small OCTOBER
+        div.title-small
+            span(style="color:#000000;") OCTOBER
+            br
+            span(style="color:#f76956;") 28&ensp;
+            span(style="color:#000000;") tables/1990/summer/yellow
+    div.gallery-small
+        - var h = 0;
+        while h < 14
+            - ++h
+            img(class=("h-" + h), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        - var v = 0;
+        while v < 7
+            - ++v
+            img(class=("v-" + v), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+    div.collection-list
+        div.item
+            a(href="/collection")
+                +card1
+        div.item
+            +card2
+        div.item
+            +card1
+        div.item
+            +card2
+        div.item
+            +card2
+        div.item
+            +card1
+        div.item
+            +card1
+        div.item
+            +card2

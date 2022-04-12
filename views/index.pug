@@ -13,11 +13,5 @@ block layout-content
         div.menu-link
             a(href="/recent") ■ Recently viewed items
     div.gallery
-        - var h = 0;
-        while h < 14
-            - ++h
-            img(class=("h-" + h), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
-        - var v = 0;
-        while v < 7
-            - ++v
-            img(class=("v-" + v), src="https://www.tate.org.uk/art/images/work/T/T01/T01133_10.jpg")
+        each val, index in gallery
+            img(class=("g-" + (index + 1)), src=("" + gallery[index]['primaryImage']))

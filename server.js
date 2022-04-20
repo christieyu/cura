@@ -3,12 +3,16 @@
 // Required External Modules
 const express = require("express");
 const path = require("path");
-const fetch = require("cross-fetch");
-const { response } = require("express");
+const cura = require("./scripts/cura");
+// const fetch = require("cross-fetch");
+// const { response } = require("express");
+// const sqlite3 = require('sqlite3').verbose();
 
 // App Variables
 const app = express();
 const port = process.env.PORT || "8000"; 
+// const db = new sqlite3.Database('objects.db');
+// module.exports = db;
 
 // App Configuration
 app.set("views", path.join(__dirname, "views"));
@@ -19,57 +23,19 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/masonry-layout/dist/masonry.pkgd.min.js')))
 
-// API object access functions
-async function listDepts() {
-    let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/departments')
-    let depts = await response.json()
-    // console.log(depts)
-    return depts
-}
-
-function getRandInt(min, max) { // https://www.w3schools.com/js/js_random.asp
-    return Math.floor(Math.random() * (max - min) ) + min;
-}
-
-async function randomObj() {
-    // get all objects
-    let response = await fetch("https://collectionapi.metmuseum.org/public/collection/v1/objects?departmentIds=3|5|6|10|11|13|14|17|21")
-    let all_objects = await response.json()
-    // get random index
-    index = getRandInt(0, all_objects['total'])
-    // console.log(index)
-    // get object
-    let response2 = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + all_objects['objectIDs'][index])
-    let object = await response2.json()
-    // console.log(object)
-    return object
-}
-
-async function makeGallery(objs) {
-    console.log('Start2')
-    let gallery = [];
-    let i = 0;
-    while (i < objs) {
-        let obj = await randomObj();
-        console.log(obj)
-        if (obj['primaryImage']) {
-            gallery.push(obj);
-            i++;
-        }
-    }
-    console.log('End')
-    return gallery;
-    
-}
-
 // Routes Definitions
 app.get("/", (req, res) => {
     // get date header info
     date = new Date()
     // make random gallery
-    console.log('Start1')
-    makeGallery(21).then( response => {
-        console.log(response)
+    console.log('----------Part 1----------')
+    let testGallery = [288224, 289206, 289219, 289220, 289221, 289263, 291383, 291385, 291386, 291387, 291388, 291390, 291391, 265786, 269047, 289170, 289169, 382942, 289183, 341796, 421658]
+    cura.getGalleryData(testGallery).then( response => {
+        console.log(response);
+        console.log('----------Part 2----------')
+        cura.getRandomTaggedObject().then( response => {
+            cura.galleryCurator(response);
+        })
         res.render("index", { 
             title: "Home", 
             date_month: date.toLocaleString('default', { month: 'long' }).toUpperCase(), 
@@ -77,38 +43,6 @@ app.get("/", (req, res) => {
             gallery: response
         });
     })
-    // async function makeGallery() {
-    //     console.log('Start2')
-    //     let gallery = [];
-    //     for (let i = 0; i < 21; i++) {
-    //         let obj = await randomObj();
-    //         gallery.push(obj);
-    //     }
-    //     console.log('End')
-    //     res.render("index", { 
-    //         title: "Home", 
-    //         date_month: date.toLocaleString('default', { month: 'long' }).toUpperCase(), 
-    //         date_day: date.getDate(),
-    //         gallery: gallery
-    //     });
-    // }
-    // makeGallery();
-
-    // let gallery = []
-    // for (i = 0; i < 21; i++) {
-    //     randomObj().then(response => {
-    //         console.log(response)
-    //         gallery.push(response)
-    //     })
-    //     // console.log(gallery)
-    // }
-    // console.log(gallery)
-    // res.render("index", { 
-    //     title: "Home", 
-    //     date_month: date.toLocaleString('default', { month: 'long' }).toUpperCase(), 
-    //     date_day: date.getDate(),
-    //     gallery: gallery
-    // });
 });
 
 app.get("/collections", (req, res) => {

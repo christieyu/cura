@@ -13,5 +13,5 @@ block layout-content
         div.menu-link
             a(href="/recent") ■ Recently viewed items
     div.gallery
-        each val, index in gallery
-            img(class=("g-" + (index + 1)), src=("" + gallery[index]['primaryImage']))
+        each object, index in gallery
+            img(class=("g-" + (index + 1)), src=("" + object['primaryImage']))

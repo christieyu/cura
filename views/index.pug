@@ -2,7 +2,7 @@ extends layout
 
 block layout-content
     div.header
-        div.title tables/1990/summer/yellow
+        div.title #{gallery_title}
         div.date-month #{date_month}
         div.date-day #{date_day}
     div.menu
@@ -14,4 +14,4 @@ block layout-content
             a(href="/recent") ■ Recently viewed items
     div.gallery
         each object, index in gallery
-            img(class=("g-" + (index + 1)), src=("" + object['primaryImage']))
+            img(class=("g-" + (index + 1)), src=("" + object[1]))

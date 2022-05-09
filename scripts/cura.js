@@ -48,7 +48,7 @@ let tagCurator = async function (objectID) {
 	let tags = result.TAGS.toString().split('|');
 	let index = getRandInt(0, tags.length)
 	// queries for all objects of the same tag
-	let query2 = "SELECT * FROM OBJECTS WHERE TAGS COLLATE Latin1_General_BIN LIKE '%" + tags[index] + "%' ORDER BY RANDOM()";
+	let query2 = 'SELECT * FROM OBJECTS WHERE TAGS COLLATE Latin1_General_BIN LIKE "%' + tags[index] + '%" ORDER BY RANDOM()';
 	let results = await new Promise((resolve, reject) => db.all(query2, (err, results) => {
 		if (err) { reject(err) } else { resolve(results); }
 	}));
@@ -71,7 +71,7 @@ let yearCurator = async function (objectID) {
 		return;
 	}
 	// queries for at most 5 random objects of the same year
-	let query2 = "SELECT * FROM OBJECTS WHERE BEGIN >=" + result["BEGIN"] + " AND END <=" + result["END"] + " ORDER BY RANDOM() LIMIT 5";
+	let query2 = 'SELECT * FROM OBJECTS WHERE BEGIN >=' + result["BEGIN"] + ' AND END <=' + result["END"] + ' ORDER BY RANDOM() LIMIT 5';
 	let results = await new Promise((resolve, reject) => db.all(query2, (err, results) => {
 		if (err) { reject(err) } else { resolve(results); }
 	}));
@@ -101,7 +101,7 @@ let artistCurator = async function (objectID) {
 	let artists = result.ARTIST.toString().split('|');
 	let index = getRandInt(0, artists.length)
 	// queries for at most 10 random objects of the same artist
-	let query2 = "SELECT * FROM OBJECTS WHERE ARTIST = '" + artists[index] + "' ORDER BY RANDOM() LIMIT 10";
+	let query2 = 'SELECT * FROM OBJECTS WHERE ARTIST = "' + artists[index] + '" ORDER BY RANDOM() LIMIT 10';
 	let results = await new Promise((resolve, reject) => db.all(query2, (err, results) => {
 		if (err) { reject(err) } else { resolve(results); }
 	}));
@@ -134,7 +134,7 @@ let movementCurator = async function (objectID) {
 		return
 	}
 	// queries for at most 10 random objects of the same movement
-	let query2 = "SELECT * FROM OBJECTS WHERE " + movement[0] + " = '" + movement[1] + "' ORDER BY RANDOM() LIMIT 10";
+	let query2 = 'SELECT * FROM OBJECTS WHERE ' + movement[0] + ' = "' + movement[1] + '" ORDER BY RANDOM() LIMIT 10';
 	let results = await new Promise((resolve, reject) => db.all(query2, (err, results) => {
 		if (err) { reject(err) } else { resolve(results); }
 	}));
@@ -162,7 +162,7 @@ let countryCurator = async function (objectID) {
 		return;
 	}
 	// queries for at most 5 random objects of the same country
-	let query2 = "SELECT * FROM OBJECTS WHERE NATIONALITY = '" + countries[galleryMetaData.artist[1]] + "' ORDER BY RANDOM() LIMIT 5";
+	let query2 = 'SELECT * FROM OBJECTS WHERE NATIONALITY = "' + countries[galleryMetaData.artist[1]] + '" ORDER BY RANDOM() LIMIT 5';
 	let results = await new Promise((resolve, reject) => db.all(query2, (err, results) => {
 		if (err) { reject(err) } else { resolve(results); }
 	}));
@@ -178,6 +178,16 @@ let countryCurator = async function (objectID) {
 at most 10 objects of the same artist, at most 10 objects of the same movement (culture, period, dynasty, reign)
 at most 5 objects of the same country, and then makes gallery display-ready */
 let galleryCurator = async function (objectID) {
+	// first reset global variables
+	galleryMetaData = {
+		"tag": null,
+		"year": null,
+		"movement": null,
+		"artist": null,
+		"country": null,
+	}
+	gallery = []
+	// now curate gallery
 	await tagCurator(objectID);
 	await yearCurator(objectID);
 	await artistCurator(objectID);

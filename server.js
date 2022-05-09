@@ -3,6 +3,7 @@
 // Required External Modules
 const express = require("express");
 const path = require("path");
+const bodyParser = require("body-parser");
 const cura = require("./scripts/cura");
 // const fetch = require("cross-fetch");
 // const { response } = require("express");
@@ -18,6 +19,7 @@ const port = process.env.PORT || "8000";
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/jquery/dist')))
@@ -44,6 +46,10 @@ app.get("/", (req, res) => {
 	});
 });
 
+app.post("/", (req, res) => {
+	console.log('Got body:', req.body);
+});
+
 app.get("/collections", (req, res) => {
 	date = new Date()
 	res.render("collections", { 
@@ -67,12 +73,13 @@ app.get("/recent", (req, res) => {
 
 app.get("/test", (req, res) => {
 	cura.getRandomTaggedObject().then( response => {
-		cura.galleryCurator(response).then( response => {
+		cura.galleryCurator(56703).then( following => {
 			gallery = cura.getGallery();
-			// console.log(gallery)
-		})
-		res.render("test", { 
-			test: response, 
+			console.log(gallery)
+			res.render("test", { 
+				gallery: gallery["gallery"], 
+				gallery_title: gallery["galleryMetaData"].label
+			});
 		});
 	});
 });

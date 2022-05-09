@@ -114,12 +114,12 @@ a:hover {
     position: absolute;
 }
 
-.gallery > img, .gallery-small > img {
+/* .gallery > img, .gallery-small > img {
     object-fit: cover;
     border: 1px solid var(--darkgrey);
     overflow: hidden;
     position: absolute;
-}
+} */
 
 .gallery-small {
     position: absolute;
@@ -128,7 +128,20 @@ a:hover {
     /* background: red; */
 }
 
-/* gallery canvases — horizontal */
+.g-img {
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    left: 0%; top: 0%;
+    border: 1px solid var(--darkgrey);
+    overflow: hidden;
+}
+
+/* gallery canvases */
+.g-all {
+    position: absolute;
+}
+
 .g-1 {
     height: 82px; width: 122px;
     left: 0px; top: 212px;
@@ -218,6 +231,174 @@ a:hover {
 .g-22 {
     width: 65px; height: 85px;
     left: 637px; top: 299px;
+}
+
+/* hover menu on images */
+
+.img-menu {
+    height: 100%; width: 100%;
+    left: 0%; top: 0%;
+    position: absolute;
+}
+
+.img-menu {
+    border: 2px solid var(--persimmon);
+    background-color: rgba(255, 255, 255, .5);
+    opacity: 0;
+}
+
+.img-menu:hover {
+    opacity: 1;
+}
+
+.img-menu .info {
+    object-fit: cover;
+    width: 30%; height: 24%;
+    left: 35%; top: 7%;
+    text-align: center;
+    position: absolute;
+}
+
+.img-menu .save {
+    width: 30%; height: 24%;
+    left: 35%; top: 38%;
+    text-align: center;
+    position: absolute;
+}
+
+.img-menu .lock {
+    width: 30%; height: 24%;
+    left: 35%; top: 69%;
+    text-align: center;
+    position: absolute;
+}
+
+.info:hover {
+    color: var(--persimmon);
+    cursor: pointer;
+}
+
+/* modal styling */
+
+.gallery-modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 270px; top: 0;
+    width: 80%; height: 100%;
+    overflow: auto;
+}
+
+.modal-content {
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; height: 90%;
+}
+
+.g-modal-img > img {
+    width: 38%; max-height: 90%;
+    left: 2%; top: 5%;
+    position: absolute;
+    overflow: auto;
+}
+
+.g-modal-text {
+    width: 55%;
+    right: 2%;
+    height: 90%;
+    position: absolute;
+    overflow-y: scroll;
+}
+
+.close {
+    z-index: 1;
+    color: #aaaaaa;
+    text-align: right;
+    font-size: 20px;
+    font-weight: bold;
+}
+  
+.close:hover, .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+p {
+    font-family: var(--font-family-yu_gothic-regular);
+}
+
+p#dept {
+    font-style: italic;
+    font-size: 8pt;
+    color: var(--darkgrey);
+}
+
+p#title {
+    font-size: 16pt;
+    text-transform: uppercase;
+}
+
+p#artist {
+    margin-bottom: 2px;
+}
+
+p#artistbio {
+    font-style: italic;
+    font-size: 10pt;
+}
+
+p#movement {
+    font-size: 12pt;
+    margin-bottom: 2px;
+}
+
+p#medium, p#dimensions {
+    font-size: 10pt;
+    margin-bottom: 1px;
+}
+
+/* always show scrollbars */
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 7px;
+}
+  
+::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(0, 0, 0, .5);
+    box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+}
+
+.btn-outline-primary {
+    color: var(--persimmon);
+    border-color: var(--persimmon);
+}
+
+.btn-outline-primary:hover {
+    color: #fff;
+    background-color: var(--persimmon);
+    border-color: var(--persimmon);
+  }
+
+p#credit, p#repo {
+    font-size: 10pt;
+    font-style: italic;
+    color: gray;
+    margin-bottom: 1px;
+}
+
+p#repo > a {
+    text-decoration: underline;
+    color: var(--persimmon);
+}
+
+span.objDept, span.objDate, span.artistName, span.artistbio, span.culture, span.period, span.dynasty, span.reign {
+    color: var(--persimmon);
+    cursor: pointer;
 }
 
 .return {

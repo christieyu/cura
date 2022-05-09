@@ -13,5 +13,132 @@ block layout-content
         div.menu-link
             a(href="/recent") ■ Recently viewed items
     div.gallery
+        div.gallery-modal(id=("info-modal"))
+            div.modal-content
+                span.close.material-symbols-outlined(id=("close")) close
+                div.g-modal-img(id="img")
+                div.g-modal-text
+                    br
+                    p(id="dept")
+                    p(id="title")
+                    p(id="artist")
+                    p(id="artistbio")
+                    p(id="movement") 
+                    br
+                    p(id="medium")
+                    p(id="dimensions")
+                    br
+                    p(id="tags")
+                    br
+                    p(id="credit")
+                    p(id="repo")
+
         each object, index in gallery
-            img(class=("g-" + (index + 1)), src=("" + object[1]))
+            div(class=("g-" + (index + 1) + " g-all"))
+                div.img-menu
+                    div.info(id=(object[0]))
+                        span.material-symbols-outlined info
+                    div.save
+                        span.material-symbols-outlined list
+                    div.lock
+                        span.material-symbols-outlined lock
+                img(class=("g-img") src=("" + object[1]))
+    script.
+        // modal tutorial from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
+        let buttons = document.getElementsByClassName("info");
+        for (let i = 0; i < buttons.length; i++) {
+            let button = buttons[i];
+            button.onclick = function() {
+                let getObjectData = async function (objectID) {
+                    let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + objectID);
+                    return response.json();
+                    //- console.log(response.json())
+                }
+                //- console.log("this id: ", this.id)
+                getObjectData(this.id).then( response => {
+                    console.log("response", response)
+                    // dept text
+                    document.getElementById('img').innerHTML = "<img src='" + response["primaryImage"] + "'>"
+                    if (response["objectName"] != "" || response["department"] != "") {
+                        document.getElementById('dept').innerHTML = response["objectName"] + " in the <span class=objDept value='" + response["department"] + "'>" + response["department"] + "</span> department"
+                        if (response["objectDate"] != "") {
+                            document.getElementById('dept').innerHTML += ", <span class=objDate value='" + response["objectBeginDate"] + "'>" +  response["objectDate"] + "</span>"
+                        }
+                    }
+                    // title text
+                    document.getElementById('title').innerHTML = response["title"]
+                    // artist text
+                    if (response["artistRole"] != "") {
+                        document.getElementById('artist').innerHTML = response["artistRole"] + ": "
+                        if (response["artistDisplayName"] != "") {
+                            document.getElementById('artist').innerHTML += "<span class=artistName value='" + response["artistDisplayName"] + "'>" + response["artistDisplayName"] + "</span>"
+                        }
+                    }
+                    if (response["artistDisplayBio"] != "" || response["artistNationality"] != "") {
+                        document.getElementById('artistbio').innerHTML = "<span class=artistBio value='" + response["artistNationality"] + "'>" + response["artistDisplayBio"] + "</span>"
+                    }
+                    // movement text
+                    document.getElementById('movement').innerHTML = ""
+                    if (response["culture"] != "") {
+                        document.getElementById('movement').innerHTML += "Culture: <span class=culture value='" + response["culture"] + "'>" + response["culture"] + "</span><br>"
+                    }
+                    if (response["period"] != "") {
+                        document.getElementById('movement').innerHTML += "Period: <span class=period value='" + response["period"] + "'>" + response["period"] + "</span><br>"
+                    }
+                    if (response["dynasty"] != "") {
+                        document.getElementById('movement').innerHTML += "Dynasty: <span class=dynasty value='" + response["dynasty"] + "'>" + response["dynasty"] + "</span><br>"
+                    }
+                    if (response["reign"] != "") {
+                        document.getElementById('movement').innerHTML += "Reign: <span class=reign value='" + response["reign"] + "'>" + response["reign"] + "</span><br>"
+                    }
+                    // misc object information
+                    if (response["medium"] != "") {
+                        document.getElementById('medium').innerHTML = "Medium: " + response["medium"]
+                    }
+                    if (response["dimensions"] != "") {
+                        document.getElementById('dimensions').innerHTML = "Dimensions: " + response["dimensions"]
+                    }
+                    // tags
+                    if (response["tags"] != null) {
+                        //- console.log(response["tags"])
+                        document.getElementById('tags').innerHTML = ""
+                        for (tag of response["tags"]) {
+                            document.getElementById('tags').innerHTML += "<button type='button' class='btn btn-outline-primary btn-sm tags' value=" + tag["term"] + ">" + tag["term"] + "</button> "
+                        }
+                    }
+                    // repository information
+                    if (response["creditLine"] != "") {
+                        document.getElementById('credit').innerHTML = response["creditLine"]
+                    }
+                    if (response["repository"] != "") {
+                        document.getElementById('repo').innerHTML = response["repository"]
+                        if (response["objectURL"] != "") {
+                            document.getElementById('repo').innerHTML += "<br><br>Full object info <a href='" + response["objectURL"] + "' target='_blank'>here</a>"
+                        }
+                    }
+                    // When the user clicks a link in the modal, do newGallery function
+                    let newQuery = document.querySelectorAll("span.objDept, span.objDate, span.artistName, span.artistbio, span.culture, span.period, span.dynasty, span.reign, button.tags")
+                    console.log("newQuery", newQuery)
+                    newQuery.forEach(link => { link.addEventListener('click', newGallery) });
+                })
+                info_modal.style.display = "block";
+            }
+        }
+        let info_modal = document.getElementById("info-modal");
+        //- console.log(info_modal)
+        let close = document.getElementById("close");
+        //- console.log(close)
+        // When the user clicks on <span> (x), close the modal
+        close.onclick = function() {
+            info_modal.style.display = "none";
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(e) {
+            if (e.target == info_modal) {
+                info_modal.style.display = "none";
+            }
+        }
+        // When the user clicks a link in the modal, regenerate exhibit
+        let newGallery = function() {
+            console.log("this:", this)
+        }

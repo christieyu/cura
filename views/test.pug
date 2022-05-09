@@ -1,4 +1,75 @@
 extends layout
 
 block layout-content
-    p.test #{test}
+    div.header
+        div.title #{gallery_title}
+    div.gallery
+        div.gallery-modal(id=("info-modal"))
+            div.modal-content
+                span.close.material-symbols-outlined(id=("close")) close
+                div.g-modal-img(id="img")
+                div.g-modal-text
+                    p(id="dept")
+                    p(id="title")
+                    p(id="artist")
+                    p(id="artistbio")
+                    br
+                    p(id="movement") 
+                    p(id="medium")
+                    p(id="dimensions")
+                    p(id="credit")
+                    p(id="repo")
+
+        each object, index in gallery
+            div(class=("g-" + (index + 1) + " g-all"))
+                div.img-menu
+                    div.info(id=(object[0]))
+                        span.material-symbols-outlined info
+                    div.save
+                        span.material-symbols-outlined list
+                    div.lock
+                        span.material-symbols-outlined lock
+                img(class=("g-img") src=("" + object[1]))
+                //- img(class=("g-img") src=("https://images.metmuseum.org/CRDImages/as/original/DP121519.jpg"))
+
+    script.
+        // modal tutorial from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
+        let buttons = document.getElementsByClassName("info");
+        for (let i = 0; i < buttons.length; i++) {
+            let button = buttons[i];
+            button.onclick = function() {
+                let getObjectData = async function (objectID) {
+                    let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + objectID);
+                    return response.json();
+                    console.log(response.json())
+                }
+                console.log("this id: ", this.id)
+                getObjectData(this.id).then( response => {
+                    console.log("response", response)
+                    document.getElementById('img').innerHTML = "<img src='" + response["primaryImage"] + "'>"
+                    document.getElementById('dept').innerHTML = response["department"] + ", " + response["objectName"]
+                    document.getElementById('title').innerHTML = response["title"] + " (" + response["objectDate"] + ")"
+                    document.getElementById('artist').innerHTML = response["artistRole"] + ": " + response["artistDisplayName"]
+                    document.getElementById('artistbio').innerHTML = response["artistDisplayBio"]
+                    document.getElementById('movement').innerHTML = "NA"
+                    document.getElementById('medium').innerHTML = "Medium: " + response["medium"]
+                    document.getElementById('dimensions').innerHTML = "Dimensions: " + response["dimensions"]
+                    document.getElementById('credit').innerHTML = response["creditLine"]
+                    document.getElementById('repo').innerHTML = "<a href='" + response["objectURL"] + "'>" + response["repository"] + "</a>"
+                })
+                
+                info_modal.style.display = "block";
+            }
+        }
+        let info_modal = document.getElementById("info-modal");
+        let close = document.getElementById("close");
+        // When the user clicks on <span> (x), close the modal
+        close.onclick = function() {
+            info_modal.style.display = "none";
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function(e) {
+            if (e.target == info_modal) {
+                info_modal.style.display = "none";
+            }
+        }

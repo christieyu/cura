@@ -53,14 +53,6 @@ app.get("/", (req, res) => {
 	});
 });
 
-// app.post("/post", (req, res) => {
-// 	console.log('----------POST----------')
-// 	cura.getRandomTaggedObject(req.body.val, req.body.key).then( response => {
-// 		console.log("req", req.body.val, req.body.key)
-// 		return res.send('' + req.body);
-// 	});
-// });
-
 app.get("/collections", (req, res) => {
 	date = new Date()
 	res.render("collections", { 

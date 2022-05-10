@@ -335,12 +335,6 @@ async function polishGallery() {
 						.slice(0,21)
 						.map(a => a[0]);
 	}
-	// // create gallery title using metadata elements
-	// let label = []
-	// if (galleryMetaData.artist) {
-	// 	galleryMetaData = [galleryMetaData.tag, galleryMetaData.year, galleryMetaData.movement, galleryMetaData.artist[0], galleryMetaData.country].filter(x => !!x);
-	// }
-	// galleryMetaData.label = label;
 }
 
 // allows other nodes to get gallery & galleryMetaData variables

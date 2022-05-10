@@ -48,9 +48,21 @@ block layout-content
                         span.material-symbols-outlined lock
                 img(class=("g-img") src=("" + object[1]))
     script.
+        // When the user clicks a link in the modal, regenerate exhibit
+        let reQuery = function() {
+            let key = this.className;
+            let val = this.id;
+            if (key == "title-persimmon") {
+                key = this.id.split('==')[0];
+                val = this.id.split('==')[1];
+            }
+            if (key == "btn btn-outline-primary btn-sm tags") {
+                key = "tags";
+            }
+            window.location.href = ('/?flag=1&key=' + encodeURIComponent(key) + '&val=' + encodeURIComponent(val));
+        }
         // When the user clicks a link in the title, do newGallery function
         let titleLinks = document.querySelectorAll(".title-persimmon")
-        console.log("titleLinks", titleLinks)
         titleLinks.forEach(link => { link.addEventListener('click', reQuery) });
         // modal tutorial from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
         let buttons = document.getElementsByClassName("info");
@@ -60,9 +72,7 @@ block layout-content
                 let getObjectData = async function (objectID) {
                     let response = await fetch('https://collectionapi.metmuseum.org/public/collection/v1/objects/' + objectID);
                     return response.json();
-                    //- console.log(response.json())
                 }
-                //- console.log("this id: ", this.id)
                 getObjectData(this.id).then( response => {
                     console.log("response", response)
                     // dept text
@@ -108,7 +118,6 @@ block layout-content
                     }
                     // tags
                     if (response["tags"] != null) {
-                        //- console.log(response["tags"])
                         document.getElementById('tag-buttons').innerHTML = ""
                         for (tag of response["tags"]) {
                             document.getElementById('tag-buttons').innerHTML += "<button type='button' class='btn btn-outline-primary btn-sm tags' id=" + tag["term"] + ">" + tag["term"] + "</button> "
@@ -125,17 +134,14 @@ block layout-content
                         }
                     }
                     // When the user clicks a link in the modal, do newGallery function
-                    let allLinks = document.querySelectorAll("span.objDept, span.objDate, span.artistName, span.artistbio, span.culture, span.period, span.dynasty, span.reign, button.tags")
-                    console.log("allLinks", allLinks)
+                    let allLinks = document.querySelectorAll("span.objDept, span.objDate, span.artistName, span.artistBio, span.culture, span.period, span.dynasty, span.reign, button.tags")
                     allLinks.forEach(link => { link.addEventListener('click', reQuery) });
                 })
                 info_modal.style.display = "block";
             }
         }
         let info_modal = document.getElementById("info-modal");
-        //- console.log(info_modal)
         let close = document.getElementById("close");
-        //- console.log(close)
         // When the user clicks on <span> (x), close the modal
         close.onclick = function() {
             info_modal.style.display = "none";
@@ -145,30 +151,4 @@ block layout-content
             if (e.target == info_modal) {
                 info_modal.style.display = "none";
             }
-        }
-        // When the user clicks a link in the modal, regenerate exhibit
-        let reQuery = function() {
-            console.log("this:", this, this.id, this.className)
-            let key = this.className;
-            let val = this.id;
-            if (this.classname == "title-persimmon") {
-                key = this.id.split('==')[0];
-                val = this.id.split('==')[1];
-            }
-            if (this.className == "btn btn-outline-primary btn-sm tags") {
-                key = "tags";
-            }
-            window.location.href = ('/?flag=1&key=' + encodeURIComponent(key) + '&val=' + encodeURIComponent(val));
-            //- // Pass to post with XML Http Request
-            //- let request = new XMLHttpRequest();
-            //- request.open('POST', '/post', false);
-            //- request.setRequestHeader('Content-Type', 'application/json');
-            //- request.onload = function () {
-            //-     console.log(request.response)
-            //-     window.location.href = ('/?id=' + request.response);
-            //- };
-            //- request.send(JSON.stringify({
-            //-     key: className,
-            //-     val: this.id,
-            //- }));
         }

@@ -1,1 +1,1 @@
-web: npm --node-options=--insecure-http-parser run dev
+web: node ./app.js

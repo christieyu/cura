@@ -4,21 +4,18 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
-const cura = require("./scripts/cura");
-// const fetch = require("cross-fetch");
-// const { response } = require("express");
-// const sqlite3 = require('sqlite3').verbose();
+const cura = require("./public/cura");
+const { nextTick } = require("process");
 
 // App Variables
 const app = express();
 const port = process.env.PORT || "8000"; 
-// const db = new sqlite3.Database('objects.db');
-// module.exports = db;
 
 // App Configuration
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/css', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/css')))
 app.use('/js', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js')))
@@ -28,11 +25,21 @@ app.use('/js', express.static(path.join(__dirname, 'node_modules/masonry-layout/
 // Routes Definitions
 app.get("/", (req, res) => {
 	// get date header info
-	date = new Date()
-	// make random gallery
-	console.log('----------Part 1----------')
-	cura.getRandomTaggedObject().then( response => {
-		cura.galleryCurator(response).then( response => {
+	let date = new Date()
+	let key = null; let val = null;
+	// make gallery based on information
+	let params = null;
+	if(req.query.flag == 1) {
+		console.log("query:", req.query)
+		key = decodeURIComponent(req.query.key);
+		val = decodeURIComponent(req.query.val);
+		if (key == "btn btn-outline-primary btn-sm tags") {
+			key = "tags";
+		}
+		params = [key, val];
+	}
+	cura.getRandomTaggedObject(key, val).then( response => {
+		cura.galleryCurator(response, params).then( response => {
 			gallery = cura.getGallery();
 			console.log(gallery["galleryMetaData"])
 			res.render("index", { 
@@ -40,15 +47,19 @@ app.get("/", (req, res) => {
 				date_month: date.toLocaleString('default', { month: 'long' }).toUpperCase(), 
 				date_day: date.getDate(),
 				gallery: gallery["gallery"],
-				gallery_title: gallery["galleryMetaData"].label
+				gallery_title: gallery["galleryMetaData"],
 			});
 		})
 	});
 });
 
-app.post("/", (req, res) => {
-	console.log('Got body:', req.body);
-});
+// app.post("/post", (req, res) => {
+// 	console.log('----------POST----------')
+// 	cura.getRandomTaggedObject(req.body.val, req.body.key).then( response => {
+// 		console.log("req", req.body.val, req.body.key)
+// 		return res.send('' + req.body);
+// 	});
+// });
 
 app.get("/collections", (req, res) => {
 	date = new Date()

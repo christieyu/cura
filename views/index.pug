@@ -2,11 +2,15 @@ extends layout
 
 block layout-content
     div.header
-        div.title #{gallery_title}
+        div.title 
+            each object of gallery_title
+                span.title-persimmon(id=(object.key + "==" + object.value)) #{object.label}
+                span /
         div.date-month #{date_month}
         div.date-day #{date_day}
     div.menu
-        div.menu-link ■ Generate a new exhibit
+        div.menu-link
+            a(href="/") ■ Generate a new exhibit
         div.menu-link ■ Save exhibit into collections
         div.menu-link-persimmon
             a(href="/collections") ■ My collections
@@ -28,7 +32,7 @@ block layout-content
                     p(id="medium")
                     p(id="dimensions")
                     br
-                    p(id="tags")
+                    p(id="tag-buttons")
                     br
                     p(id="credit")
                     p(id="repo")
@@ -44,6 +48,10 @@ block layout-content
                         span.material-symbols-outlined lock
                 img(class=("g-img") src=("" + object[1]))
     script.
+        // When the user clicks a link in the title, do newGallery function
+        let titleLinks = document.querySelectorAll(".title-persimmon")
+        console.log("titleLinks", titleLinks)
+        titleLinks.forEach(link => { link.addEventListener('click', reQuery) });
         // modal tutorial from https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_modal
         let buttons = document.getElementsByClassName("info");
         for (let i = 0; i < buttons.length; i++) {
@@ -60,9 +68,9 @@ block layout-content
                     // dept text
                     document.getElementById('img').innerHTML = "<img src='" + response["primaryImage"] + "'>"
                     if (response["objectName"] != "" || response["department"] != "") {
-                        document.getElementById('dept').innerHTML = response["objectName"] + " in the <span class=objDept value='" + response["department"] + "'>" + response["department"] + "</span> department"
+                        document.getElementById('dept').innerHTML = response["objectName"] + " in the <span class=objDept id='" + response["department"] + "'>" + response["department"] + "</span> department"
                         if (response["objectDate"] != "") {
-                            document.getElementById('dept').innerHTML += ", <span class=objDate value='" + response["objectBeginDate"] + "'>" +  response["objectDate"] + "</span>"
+                            document.getElementById('dept').innerHTML += ", <span class=objDate id='" + response["objectBeginDate"] + "'>" +  response["objectDate"] + "</span>"
                         }
                     }
                     // title text
@@ -71,25 +79,25 @@ block layout-content
                     if (response["artistRole"] != "") {
                         document.getElementById('artist').innerHTML = response["artistRole"] + ": "
                         if (response["artistDisplayName"] != "") {
-                            document.getElementById('artist').innerHTML += "<span class=artistName value='" + response["artistDisplayName"] + "'>" + response["artistDisplayName"] + "</span>"
+                            document.getElementById('artist').innerHTML += "<span class=artistName id='" + response["artistDisplayName"] + "'>" + response["artistDisplayName"] + "</span>"
                         }
                     }
                     if (response["artistDisplayBio"] != "" || response["artistNationality"] != "") {
-                        document.getElementById('artistbio').innerHTML = "<span class=artistBio value='" + response["artistNationality"] + "'>" + response["artistDisplayBio"] + "</span>"
+                        document.getElementById('artistbio').innerHTML = "<span class=artistBio id='" + response["artistNationality"] + "'>" + response["artistDisplayBio"] + "</span>"
                     }
                     // movement text
                     document.getElementById('movement').innerHTML = ""
                     if (response["culture"] != "") {
-                        document.getElementById('movement').innerHTML += "Culture: <span class=culture value='" + response["culture"] + "'>" + response["culture"] + "</span><br>"
+                        document.getElementById('movement').innerHTML += "Culture: <span class=culture id='" + response["culture"] + "'>" + response["culture"] + "</span><br>"
                     }
                     if (response["period"] != "") {
-                        document.getElementById('movement').innerHTML += "Period: <span class=period value='" + response["period"] + "'>" + response["period"] + "</span><br>"
+                        document.getElementById('movement').innerHTML += "Period: <span class=period id='" + response["period"] + "'>" + response["period"] + "</span><br>"
                     }
                     if (response["dynasty"] != "") {
-                        document.getElementById('movement').innerHTML += "Dynasty: <span class=dynasty value='" + response["dynasty"] + "'>" + response["dynasty"] + "</span><br>"
+                        document.getElementById('movement').innerHTML += "Dynasty: <span class=dynasty id='" + response["dynasty"] + "'>" + response["dynasty"] + "</span><br>"
                     }
                     if (response["reign"] != "") {
-                        document.getElementById('movement').innerHTML += "Reign: <span class=reign value='" + response["reign"] + "'>" + response["reign"] + "</span><br>"
+                        document.getElementById('movement').innerHTML += "Reign: <span class=reign id='" + response["reign"] + "'>" + response["reign"] + "</span><br>"
                     }
                     // misc object information
                     if (response["medium"] != "") {
@@ -101,9 +109,9 @@ block layout-content
                     // tags
                     if (response["tags"] != null) {
                         //- console.log(response["tags"])
-                        document.getElementById('tags').innerHTML = ""
+                        document.getElementById('tag-buttons').innerHTML = ""
                         for (tag of response["tags"]) {
-                            document.getElementById('tags').innerHTML += "<button type='button' class='btn btn-outline-primary btn-sm tags' value=" + tag["term"] + ">" + tag["term"] + "</button> "
+                            document.getElementById('tag-buttons').innerHTML += "<button type='button' class='btn btn-outline-primary btn-sm tags' id=" + tag["term"] + ">" + tag["term"] + "</button> "
                         }
                     }
                     // repository information
@@ -117,9 +125,9 @@ block layout-content
                         }
                     }
                     // When the user clicks a link in the modal, do newGallery function
-                    let newQuery = document.querySelectorAll("span.objDept, span.objDate, span.artistName, span.artistbio, span.culture, span.period, span.dynasty, span.reign, button.tags")
-                    console.log("newQuery", newQuery)
-                    newQuery.forEach(link => { link.addEventListener('click', newGallery) });
+                    let allLinks = document.querySelectorAll("span.objDept, span.objDate, span.artistName, span.artistbio, span.culture, span.period, span.dynasty, span.reign, button.tags")
+                    console.log("allLinks", allLinks)
+                    allLinks.forEach(link => { link.addEventListener('click', reQuery) });
                 })
                 info_modal.style.display = "block";
             }
@@ -139,6 +147,28 @@ block layout-content
             }
         }
         // When the user clicks a link in the modal, regenerate exhibit
-        let newGallery = function() {
-            console.log("this:", this)
+        let reQuery = function() {
+            console.log("this:", this, this.id, this.className)
+            let key = this.className;
+            let val = this.id;
+            if (this.classname == "title-persimmon") {
+                key = this.id.split('==')[0];
+                val = this.id.split('==')[1];
+            }
+            if (this.className == "btn btn-outline-primary btn-sm tags") {
+                key = "tags";
+            }
+            window.location.href = ('/?flag=1&key=' + encodeURIComponent(key) + '&val=' + encodeURIComponent(val));
+            //- // Pass to post with XML Http Request
+            //- let request = new XMLHttpRequest();
+            //- request.open('POST', '/post', false);
+            //- request.setRequestHeader('Content-Type', 'application/json');
+            //- request.onload = function () {
+            //-     console.log(request.response)
+            //-     window.location.href = ('/?id=' + request.response);
+            //- };
+            //- request.send(JSON.stringify({
+            //-     key: className,
+            //-     val: this.id,
+            //- }));
         }

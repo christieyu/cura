@@ -29,6 +29,11 @@
     --font-family-yu_gothic-regular: "Yu Gothic-Regular";
 }
 
+body {
+    height: 2px;
+    z-index: -5;
+}
+
 /* styles */
 .hidden, .hidden * {
     pointer-events: none;
@@ -65,6 +70,12 @@ a:hover {
     right: 30px; top: 20px;
     position: absolute;
     text-align: right;
+    z-index: 5;
+}
+
+.title > .title-persimmon:hover {
+    color: var(--persimmon);
+    cursor: pointer;
 }
  
 .title-small {
@@ -396,7 +407,7 @@ p#repo > a {
     color: var(--persimmon);
 }
 
-span.objDept, span.objDate, span.artistName, span.artistbio, span.culture, span.period, span.dynasty, span.reign {
+span.objDate, span.artistName, span.artistBio, span.culture, span.period, span.dynasty, span.reign {
     color: var(--persimmon);
     cursor: pointer;
 }

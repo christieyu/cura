@@ -5,7 +5,6 @@ const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
 const cura = require("./public/cura");
-const { nextTick } = require("process");
 
 // App Variables
 const app = express();
